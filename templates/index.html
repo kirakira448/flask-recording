@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Recorder Control</title>
+    <script>
+        function toggleRecording() {
+            fetch('/toggle', { method: 'GET' })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.status);
+                    updateButton(data.is_recording);
+                })
+                .catch(error => console.error('Error toggling recording:', error));
+        }
+
+        function updateButton(isRecording) {
+            var button = document.getElementById('toggleButton');
+            if (isRecording) {
+                button.textContent = 'Stop';
+                button.setAttribute('onclick', 'toggleRecording()');
+            } else {
+                button.textContent = 'Start';
+                button.setAttribute('onclick', 'toggleRecording()');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Video Recorder Control</h1>
+
+    <button id="toggleButton" onclick="toggleRecording()">Start</button>
+
+    <script>
+        // 页面加载时初始化按钮状态
+        fetch('/status', { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.status);
+                updateButton(data.is_recording);
+            })
+            .catch(error => console.error('Error fetching status:', error));
+    </script>
+</body>
+</html>
